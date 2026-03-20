@@ -1,0 +1,44 @@
+<!-- Navbar -->
+<nav class="bg-white shadow-md fixed w-full z-50 top-0 left-0">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="/" class="flex items-center">
+            <img src="/pics/logo.png" alt="LinkedU Logo" class="h-24">
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8">
+            <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition">Accueil</a>
+            <a href="/destinations" class="text-gray-700 hover:text-blue-600 font-medium transition">Destinations</a>
+            <a href="/services" class="text-gray-700 hover:text-blue-600 font-medium transition">Services</a>
+            <a href="/blogs" class="text-gray-700 hover:text-blue-600 font-medium transition">Blog</a>
+            <a href="/about-us" class="text-gray-700 hover:text-blue-600 font-medium transition">À Propos</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" type="button" aria-label="Toggle menu" class="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+        <div class="container mx-auto px-6 py-4 space-y-4">
+            <a href="/" class="block text-gray-700 hover:text-blue-600 font-medium transition py-2">Accueil</a>
+            <a href="/destinations" class="block text-gray-700 hover:text-blue-600 font-medium transition py-2">Destinations</a>
+            <a href="/services" class="block text-gray-700 hover:text-blue-600 font-medium transition py-2">Services</a>
+            <a href="/blogs" class="block text-gray-700 hover:text-blue-600 font-medium transition py-2">Blog</a>
+            <a href="/about-us" class="block text-gray-700 hover:text-blue-600 font-medium transition py-2">À Propos</a>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>

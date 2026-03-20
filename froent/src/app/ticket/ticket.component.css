@@ -1,0 +1,327 @@
+.ticket-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.ticket-header {
+  max-width: 800px;
+  margin: 0 auto 30px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #4a5568;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: #3182ce;
+}
+
+/* No Access */
+.no-access {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.no-access-content {
+  text-align: center;
+  background: white;
+  padding: 60px 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.no-access-content svg {
+  color: #e53e3e;
+  margin-bottom: 20px;
+}
+
+.no-access-content h2 {
+  color: #2d3748;
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.no-access-content p {
+  color: #718096;
+  margin-bottom: 8px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #3182ce;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  margin-top: 20px;
+}
+
+.btn-primary:hover {
+  background: #2c5282;
+}
+
+/* Ticket Card */
+.ticket-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.ticket-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+}
+
+.brand-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.ticket-status {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ticket-status.active {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Ticket Body */
+.ticket-body {
+  padding: 32px;
+}
+
+.ticket-info {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.meeting-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.ticket-id {
+  color: #718096;
+  font-size: 14px;
+}
+
+/* Meeting Details */
+.meeting-details {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.detail-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #4a5568;
+  font-size: 16px;
+}
+
+.detail-item svg {
+  color: #3182ce;
+}
+
+.detail-item.full-width {
+  flex: 1;
+}
+
+.description-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.description-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 8px;
+}
+
+.description-section p {
+  color: #718096;
+  line-height: 1.6;
+}
+
+/* Google Meet Section */
+.meet-section {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-radius: 12px;
+  padding: 24px;
+  border: 2px solid #93c5fd;
+}
+
+.meet-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.meet-header svg {
+  color: #2563eb;
+}
+
+.meet-header span {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.meet-link-box {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.meet-link-input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 2px solid #93c5fd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #2d3748;
+  background: white;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.meet-link-input:focus {
+  border-color: #2563eb;
+}
+
+.btn-copy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: white;
+  border: 2px solid #93c5fd;
+  border-radius: 8px;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-copy:hover {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.btn-join {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-join:hover {
+  background: #1d4ed8;
+}
+
+/* Footer */
+.ticket-footer {
+  padding: 20px 32px;
+  background: #f7fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.footer-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #718096;
+  font-size: 14px;
+}
+
+.footer-note svg {
+  color: #f59e0b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .detail-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .meet-link-box {
+    flex-direction: column;
+  }
+
+  .ticket-header-content {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .meeting-title {
+    font-size: 22px;
+  }
+}

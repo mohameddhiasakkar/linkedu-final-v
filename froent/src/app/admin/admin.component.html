@@ -1,0 +1,62 @@
+<div class="sidebar" [class.collapsed]="sidebarCollapsed">
+  <button (click)="toggleSidebar()">Toggle Sidebar</button>
+  <ul>
+    <li (click)="setSection('statistics')">Dashboard</li>
+    <li (click)="setSection('students')">Students</li>
+    <li (click)="setSection('employers')">Employers</li>
+    <li (click)="setSection('product-keys')">Product Keys</li>
+  </ul>
+</div>
+
+<div class="content">
+  <div *ngIf="currentSection==='statistics'">
+    <h2>Dashboard</h2>
+    <p>Students: {{ stats.students }}</p>
+    <p>Employers: {{ stats.employers }}</p>
+    <p>Active Jobs: {{ stats.activeJobs }}</p>
+    <p>Revenue: {{ stats.revenue | currency }}</p>
+  </div>
+
+  <div *ngIf="currentSection==='students'">
+    <h2>Students</h2>
+    <input [(ngModel)]="studentSearch" placeholder="Search..." />
+    <table>
+      <tr><th>Name</th><th>Email</th><th>Status</th><th>Actions</th></tr>
+      <tr *ngFor="let s of filteredStudents">
+        <td>{{ s.name }}</td><td>{{ s.email }}</td>
+        <td><span [class]="getStatusClass(s.status)">{{ s.status }}</span></td>
+        <td>
+          <button (click)="approveStudent(s.id)">Approve</button>
+          <button (click)="deactivateStudent(s.id)">Deactivate</button>
+          <button (click)="deleteStudent(s.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div *ngIf="currentSection==='employers'">
+    <h2>Employers</h2>
+    <input [(ngModel)]="employerSearch" placeholder="Search..." />
+    <table>
+      <tr><th>Name</th><th>Industry</th><th>Status</th><th>Actions</th></tr>
+      <tr *ngFor="let e of filteredEmployers">
+        <td>{{ e.name }}</td><td>{{ e.industry }}</td>
+        <td><span [class]="getStatusClass(e.status)">{{ e.status }}</span></td>
+        <td>
+          <button (click)="approveEmployer(e.id)">Approve</button>
+          <button (click)="deactivateEmployer(e.id)">Deactivate</button>
+          <button (click)="deleteEmployer(e.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div *ngIf="currentSection==='product-keys'">
+    <h2>Product Keys</h2>
+    <input [(ngModel)]="newKeyValue" placeholder="New Key" />
+    <button (click)="createProductKey()">Add</button>
+    <ul>
+      <li *ngFor="let k of productKeys">{{ k.keyValue }} - {{ k.used ? 'Used':'Available' }}</li>
+    </ul>
+  </div>
+</div>

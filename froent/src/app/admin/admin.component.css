@@ -1,0 +1,10 @@
+.sidebar { width:200px; float:left; background:#f0f0f0; padding:10px; }
+.sidebar.collapsed { width:50px; }
+.content { margin-left:200px; padding:10px; }
+.badge-success { color:green; font-weight:bold; }
+.badge-warning { color:orange; font-weight:bold; }
+.badge-danger { color:red; font-weight:bold; }
+table { width:100%; border-collapse:collapse; margin-top:10px; }
+th, td { border:1px solid #ccc; padding:5px; text-align:left; }
+input { margin-bottom:10px; padding:5px; width:200px; }
+button { margin-right:5px; }

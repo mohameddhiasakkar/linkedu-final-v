@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedU - Accueil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans text-gray-800">
+    <!-- Skip Link -->
+    <a href="#content" class="sr-only focus:not-sr-only focus:top-4 focus:left-4 z-50 focus:absolute bg-white p-2">Aller au contenu</a>
+
+    <!-- Navigation -->
+    <div id="navbar-container"></div>
+    <script>
+        fetch('components/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-container').innerHTML = data;
+            });
+    </script>
+
+    <main id="content">
+        <!-- Hero Section -->
+        <section class="relative bg-gray-900 py-32 text-white">
+            <!-- Background image placeholder -->
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-gray-900 opacity-90"></div>
+            
+            <div class="z-10 relative mx-auto px-6 text-center container">
+                <p class="mb-4 font-semibold text-blue-300 uppercase tracking-wider">CHARTING PATHS, CONNECTING CULTURES</p>
+                <h1 class="mx-auto mb-8 max-w-4xl font-bold text-4xl md:text-6xl leading-tight">UNE ETAPE VERS VOTRE RÉUSSITE D’ÉTUDES À L’INTERNATIONAL</h1>
+                <a href="#" class="inline-block bg-white hover:bg-gray-100 px-8 py-3 rounded-full font-bold text-blue-900 transition">EN SAVOIR PLUS</a>
+            </div>
+        </section>
+
+        <!-- Notre démarche -->
+        <section class="bg-white py-20">
+            <div class="flex lg:flex-row flex-col items-center gap-12 mx-auto px-6 container">
+                <div class="lg:w-1/2">
+                    <h2 class="mb-6 font-bold text-gray-900 text-3xl md:text-4xl">Notre démarche</h2>
+                    <p class="mb-4 text-gray-600 text-lg leading-relaxed">
+                        Chez LinkedU, nous transformons les démarches complexes en un parcours fluide et transparent.
+                    </p>
+                    <p class="mb-8 text-gray-600 leading-relaxed">
+                        De votre première réflexion à votre installation à l’étranger, notre équipe vous guide pas à pas pour maximiser vos chances de réussite dans vos études à l’international.
+                    </p>
+                    <a href="#" class="font-bold text-blue-600 hover:text-blue-800 decoration-2 underline underline-offset-4">EN SAVOIR PLUS</a>
+                </div>
+                <div class="bg-gray-50 shadow-sm p-8 border border-gray-100 rounded-2xl w-full lg:w-1/2">
+                    <ul class="space-y-4">
+                        <li class="flex items-center bg-white shadow-sm p-3 rounded-lg">
+                            <span class="flex flex-shrink-0 justify-center items-center bg-blue-100 mr-4 rounded-full w-8 h-8 font-bold text-blue-600">1</span>
+                            <span class="font-medium">Orientation et consolidation</span>
+                        </li>
+                        <li class="flex items-center bg-white shadow-sm p-3 rounded-lg">
+                            <span class="flex flex-shrink-0 justify-center items-center bg-blue-100 mr-4 rounded-full w-8 h-8 font-bold text-blue-600">2</span>
+                            <span class="font-medium">Préparation de dossier de candidature</span>
+                        </li>
+                        <li class="flex items-center bg-white shadow-sm p-3 rounded-lg">
+                            <span class="flex flex-shrink-0 justify-center items-center bg-blue-100 mr-4 rounded-full w-8 h-8 font-bold text-blue-600">3</span>
+                            <span class="font-medium">Préparation de l’entretien</span>
+                        </li>
+                        <li class="flex items-center bg-white shadow-sm p-3 rounded-lg">
+                            <span class="flex flex-shrink-0 justify-center items-center bg-blue-100 mr-4 rounded-full w-8 h-8 font-bold text-blue-600">4</span>
+                            <span class="font-medium">Vérification et dépôt de dossier</span>
+                        </li>
+                        <li class="flex items-center bg-white shadow-sm p-3 rounded-lg">
+                            <span class="flex flex-shrink-0 justify-center items-center bg-blue-100 mr-4 rounded-full w-8 h-8 font-bold text-blue-600">5</span>
+                            <span class="font-medium">Suivie jusqu’à l’attestation d’admission</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notre Expertise -->
+        <section class="bg-blue-900 py-20 text-white text-center">
+            <div class="mx-auto px-6 container">
+                <h2 class="mb-4 font-bold text-blue-300 text-sm uppercase tracking-widest">NOTRE EXPERTISE</h2>
+                <p class="mx-auto mb-10 max-w-3xl font-bold text-2xl md:text-3xl leading-snug">
+                    FAIRE DE VOTRE PROJET D’ÉTUDES À L’ÉTRANGER UNE RÉALITÉ TANGIBLE GRÂCE À UN ACCOMPAGNEMENT STRATÉGIQUE SUR MESURE.
+                </p>
+                <a href="#" class="inline-block hover:bg-white px-8 py-3 border-2 border-white rounded-full font-bold text-white hover:text-blue-900 transition">Découvrir</a>
+            </div>
+        </section>
+</body>
+</html>

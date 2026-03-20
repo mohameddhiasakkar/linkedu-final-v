@@ -1,0 +1,118 @@
+<div class="flex justify-center items-center bg-gradient-to-br from-blue-600 to-blue-800 min-h-screen">
+  <!-- Decorative background elements -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="-top-40 -right-40 absolute bg-yellow-300 opacity-70 blur-xl rounded-full w-80 h-80 animate-blob mix-blend-multiply filter"></div>
+    <div class="-bottom-40 -left-40 absolute bg-yellow-400 opacity-70 blur-xl rounded-full w-80 h-80 animate-blob animation-delay-2000 mix-blend-multiply filter"></div>
+    <div class="top-60 left-20 absolute bg-blue-300 opacity-70 blur-xl rounded-full w-80 h-80 animate-blob animation-delay-4000 mix-blend-multiply filter"></div>
+  </div>
+
+  <!-- Login Card -->
+  <div class="relative space-y-6 bg-white/95 shadow-2xl hover:shadow-yellow-200/50 backdrop-blur-sm p-8 rounded-2xl w-full max-w-md hover:scale-105 transition-all duration-500 transform">
+    <!-- Decorative header with blue and yellow -->
+    <div class="top-0 left-0 absolute bg-gradient-to-r from-blue-600 via-yellow-400 to-blue-600 rounded-t-2xl w-full h-2"></div>
+    
+    <!-- Logo/Brand Section -->
+    <div class="text-center">
+      <h2 class="bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 mt-4 font-extrabold text-transparent text-3xl">
+        Welcome Back!
+      </h2>
+      <p class="mt-2 text-gray-600 text-sm">Sign in to continue your journey</p>
+    </div>
+
+    <!-- Form -->
+    <form class="space-y-6" (ngSubmit)="onSubmit()">
+      <div class="space-y-4">
+        <!-- Email Field -->
+        <div>
+          <label for="email" class="block font-semibold text-gray-700 text-sm">Email Address</label>
+          <div class="relative mt-1">
+            <div class="left-0 absolute inset-y-0 flex items-center pl-3 pointer-events-none">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+              </svg>
+            </div>
+            <input id="email" name="email" type="email" autocomplete="email" required
+                   [(ngModel)]="email"
+                   class="py-3 pr-3 pl-10 border-2 border-gray-200 focus:border-blue-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 w-full transition-all duration-300 placeholder-gray-400"
+                   placeholder="you@example.com">
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label for="password" class="block font-semibold text-gray-700 text-sm">Password</label>
+          <div class="relative mt-1">
+            <div class="left-0 absolute inset-y-0 flex items-center pl-3 pointer-events-none">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <input id="password" name="password" type="password" autocomplete="current-password" required
+                   [(ngModel)]="password"
+                   class="py-3 pr-3 pl-10 border-2 border-gray-200 focus:border-blue-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 w-full transition-all duration-300 placeholder-gray-400"
+                   placeholder="••••••••">
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <p *ngIf="errorMessage" class="bg-red-500 px-4 py-2 rounded-lg text-white text-sm animate-pulse">
+        ⚠️ {{ errorMessage }}
+      </p>
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit" [disabled]="isSubmitting"
+                class="group relative px-4 py-3 rounded-xl w-full overflow-hidden font-bold text-white text-base">
+          <!-- Gradient Background -->
+          <span class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-800 w-full h-full"></span>
+          <!-- Yellow Overlay on Hover -->
+          <span class="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-500 opacity-0 group-hover:opacity-100 w-full h-full transition-opacity duration-300"></span>
+          <!-- Button Text -->
+          <span class="relative flex justify-center items-center">
+            {{ isSubmitting ? 'Signing in...' : 'Login' }}
+            <svg *ngIf="!isSubmitting" class="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+            <svg *ngIf="isSubmitting" class="ml-2 w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <!-- Additional Links -->
+      <div class="flex justify-between items-center text-sm">
+        <a href="#" class="font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200">
+          Forgot password?
+        </a>
+        <a href="/signup" class="font-medium text-yellow-600 hover:text-yellow-800 hover:underline transition-colors duration-200">
+          Create account
+        </a>
+      </div>
+    </form>
+
+    <!-- Social Login (Optional Enhancement) -->
+    <div class="relative">
+      <div class="absolute inset-0 flex items-center">
+        <div class="border-gray-300 border-t w-full"></div>
+      </div>
+      <div class="relative flex justify-center text-sm">
+        <span class="bg-white px-4 text-gray-500">Or continue with</span>
+      </div>
+    </div>
+
+    <div class="flex gap-3">
+      <button class="group flex flex-1 justify-center items-center hover:bg-blue-50 px-4 py-2 border-2 border-gray-200 hover:border-blue-600 rounded-xl transition-all duration-300">
+        <svg class="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
+        </svg>
+      </button>
+      <button class="group flex flex-1 justify-center items-center hover:bg-blue-50 px-4 py-2 border-2 border-gray-200 hover:border-blue-600 rounded-xl transition-all duration-300">
+        <svg class="w-5 h-5 text-blue-800 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M20.283,10.356h-8.327v3.451h4.792c-0.446,2.193-2.313,3.453-4.792,3.453c-2.923,0-5.279-2.356-5.279-5.28c0-2.923,2.356-5.279,5.279-5.279c1.259,0,2.397,0.447,3.29,1.178l2.6-2.588c-1.54-1.413-3.553-2.248-5.89-2.248c-4.849,0-8.771,3.922-8.771,8.771c0,4.849,3.922,8.771,8.771,8.771c4.191,0,7.805-2.786,8.687-6.6C20.967,12.214,20.867,11.247,20.283,10.356z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

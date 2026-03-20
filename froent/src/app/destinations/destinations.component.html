@@ -1,0 +1,59 @@
+<main class="pt-20">
+  <!-- Hero Section -->
+  <section class="relative bg-gray-900 py-32 overflow-hidden text-white">
+    <!-- Animated background elements -->
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-950 via-blue-900 to-gray-900"></div>
+    <div class="top-0 left-0 absolute opacity-30 w-full h-full">
+      <div class="top-20 left-10 absolute bg-blue-500 blur-3xl rounded-full w-72 h-72 mix-blend-multiply filter"></div>
+      <div class="top-20 right-10 absolute bg-cyan-500 blur-3xl rounded-full w-72 h-72 mix-blend-multiply filter"></div>
+      <div class="-bottom-8 left-1/2 absolute bg-indigo-500 blur-3xl rounded-full w-72 h-72 mix-blend-multiply filter"></div>
+    </div>
+
+    <div class="z-10 relative mx-auto px-6 container">
+      <div class="flex lg:flex-row flex-col items-center gap-12">
+        <div class="order-2 lg:order-1 lg:w-1/2 lg:text-left text-center">
+          <span class="inline-block bg-blue-500/20 hover:bg-blue-500/30 backdrop-blur-sm mb-6 px-4 py-2 border border-blue-400/30 rounded-full font-medium text-blue-300 text-sm transition-colors cursor-default">
+            🌍 Explorez le Monde
+          </span>
+          <p class="mb-4 font-semibold text-blue-200 text-lg uppercase tracking-widest">DESTINATIONS INTERNATIONALES</p>
+          <h1 class="mb-6 font-bold text-4xl md:text-5xl lg:text-6xl leading-tight">
+            NOS <span class="text-yellow-400">DESTINATIONS</span> POUR VOS ÉTUDES
+          </h1>
+          <p class="mx-auto lg:mx-0 mb-8 max-w-xl text-gray-300 text-xl leading-relaxed">
+            Découvrez les pays où nos étudiants étudient et réalisez votre rêve d'études à l'international.
+          </p>
+        </div>
+        <div class="order-1 lg:order-2 lg:w-1/2">
+          <div class="relative mx-auto w-100 lg:w-100 h-100 lg:h-100">
+            <div class="absolute -inset-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 blur-xl rounded-full"></div>
+            <img src="/pics/3.jpg" alt="LinkedU - Destinations" class="relative shadow-2xl hover:shadow-blue-500/25 rounded-full w-full h-full object-cover hover:scale-[1.02] transition-shadow duration-300 transform">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Destinations Grid -->
+  <section class="relative py-24 overflow-hidden">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover">
+      <source src="/pics/2.mp4" type="video/mp4">
+    </video>
+
+    <div class="z-10 relative mx-auto px-6 container">
+      <div class="gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Dynamic Destinations -->
+        <div *ngFor="let dest of destinations" class="group relative bg-white shadow-lg hover:shadow-2xl mx-auto rounded-full w-72 h-72 overflow-hidden transition-all hover:-translate-y-2 duration-300">
+          <img [src]="dest.image" [alt]="dest.countryName" class="rounded-full w-full h-full object-cover" />
+          <div class="absolute inset-0 flex flex-col justify-end items-center bg-gradient-to-t from-black/50 to-transparent p-6 rounded-full">
+            <h3 class="mb-2 font-bold text-white text-2xl text-center">{{ dest.countryName | uppercase }}</h3>
+            <p class="text-white text-lg text-center">{{ dest.description }}</p>
+            <a [routerLink]="dest.link" class="inline-flex justify-center items-center bg-blue-600 hover:bg-blue-700 mt-3 px-6 py-3 rounded-full font-bold text-white text-lg transition-all">
+              DÉCOUVRIR
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
