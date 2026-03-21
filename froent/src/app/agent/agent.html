@@ -21,6 +21,15 @@
         <span class="nav-badge">{{ attempts().length || '—' }}</span>
       </button>
 
+      <!-- ── CHAT NAV ITEM ── -->
+      <button class="nav-item" [class.active]="activeTab === 'chat'" (click)="setTab('chat')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+        </svg>
+        Chat
+        <span class="nav-badge" *ngIf="unreadCount() > 0">{{ unreadCount() }}</span>
+      </button>
+
       <button class="nav-item" [class.active]="activeTab === 'assign'" (click)="setTab('assign')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M12 5v14M5 12h14"/>
@@ -46,7 +55,7 @@
     </div>
 
     <div class="sidebar-footer">
-      <label class="footer-label">Agent ID</label>
+      <label class="footer-label">Agent ID (My User ID)</label>
       <input
         class="footer-input"
         type="number"
@@ -69,7 +78,11 @@
         <div class="topbar-sub" *ngIf="activeTab === 'reviews'">
           {{ attempts().length }} total · {{ pendingCount() }} awaiting review
         </div>
+        <div class="topbar-sub" *ngIf="activeTab === 'chat' && receiverId">
+          Chatting with User #{{ receiverId }}
+        </div>
       </div>
+
       <button
         class="refresh-btn"
         [class.spinning]="loadingReviews()"
@@ -83,18 +96,30 @@
           <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
         </svg>
       </button>
+
+      <button
+        class="refresh-btn"
+        [class.spinning]="loadingChat()"
+        (click)="loadConversation()"
+        *ngIf="activeTab === 'chat' && receiverId"
+        title="Refresh messages"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6"/>
+          <path d="M1 20v-6h6"/>
+          <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+        </svg>
+      </button>
     </header>
 
     <!-- ── TAB: REVIEWS ──────────────────────────────────────────────────── -->
     <section class="panel" *ngIf="activeTab === 'reviews'">
 
-      <!-- Loader -->
       <div class="loader" *ngIf="loadingReviews()">
         <span class="spinner"></span>
         Loading quiz attempts…
       </div>
 
-      <!-- Empty -->
       <div class="empty-state" *ngIf="!loadingReviews() && attempts().length === 0">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
           <circle cx="12" cy="12" r="10"/>
@@ -103,7 +128,6 @@
         <p>No quiz attempts found for Agent #{{ agentId }}</p>
       </div>
 
-      <!-- Cards grid -->
       <div class="cards-grid" *ngIf="!loadingReviews() && attempts().length > 0">
         <div
           class="attempt-card"
@@ -114,9 +138,7 @@
             <span class="attempt-id">ATTEMPT #{{ a.id }}</span>
             <span class="status-pill" [class]="getStatus(a)">{{ getStatus(a) }}</span>
           </div>
-
           <div class="card-title">{{ getQuizTitle(a) }}</div>
-
           <div class="card-meta">
             <span>
               <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -137,19 +159,155 @@
               Awaiting review
             </span>
           </div>
-
-          <!-- Score bar (only when reviewed) -->
           <div class="score-row" *ngIf="a.passed !== null && a.score !== null">
             <div class="score-bar">
               <div class="score-fill" [style.width]="scoreWidth(a.score)"></div>
             </div>
             <span class="score-num">{{ a.score }}</span>
           </div>
-
           <button class="review-btn" (click)="openModal(a)">
             {{ a.passed === null ? '⚡ Review Now' : '✏️ Re-Review' }}
           </button>
         </div>
+      </div>
+
+    </section>
+
+    <!-- ── TAB: CHAT ─────────────────────────────────────────────────────── -->
+    <section class="panel chat-panel" *ngIf="activeTab === 'chat'">
+
+      <!-- Left: contacts list -->
+      <div class="chat-contacts">
+        <div class="contacts-header">
+          <span class="contacts-title">Conversations</span>
+        </div>
+
+        <!-- Receiver ID input to open a new chat -->
+        <div class="contacts-new">
+          <input
+            type="number"
+            class="contacts-new-input"
+            [(ngModel)]="receiverIdInput"
+            placeholder="User ID to chat with…"
+            min="1"
+            (keydown.enter)="onReceiverIdChange()"
+            (change)="onReceiverIdChange()"
+          />
+        </div>
+
+        <!-- Contact list -->
+        <div class="contact-list">
+          <div
+            class="contact-item"
+            *ngFor="let c of contacts"
+            [class.active]="isActiveContact(c.userId)"
+            (click)="selectContact(c.userId)"
+          >
+            <div class="contact-avatar">{{ initials(c.userId) }}</div>
+            <div class="contact-info">
+              <div class="contact-name">User #{{ c.userId }}</div>
+              <div class="contact-preview">{{ c.lastMessage }}</div>
+            </div>
+            <div class="contact-meta">
+              <span class="contact-time">{{ c.lastTime }}</span>
+              <span class="unread-badge" *ngIf="c.unreadCount > 0">{{ c.unreadCount }}</span>
+            </div>
+          </div>
+
+          <div class="contacts-empty" *ngIf="contacts.length === 0">
+            <p>Enter a User ID above to start a conversation.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: message pane -->
+      <div class="chat-pane">
+
+        <!-- No conversation selected -->
+        <div class="chat-empty-state" *ngIf="!receiverId">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+          <p>Select or enter a User ID to start chatting</p>
+        </div>
+
+        <!-- Active conversation -->
+        <ng-container *ngIf="receiverId">
+
+          <!-- Chat header -->
+          <div class="chat-header">
+            <div class="chat-avatar">{{ initials(receiverId) }}</div>
+            <div class="chat-header-info">
+              <div class="chat-header-name">User #{{ receiverId }}</div>
+              <div class="chat-header-status">
+                <span class="status-dot"></span> active
+              </div>
+            </div>
+          </div>
+
+          <!-- Messages area -->
+          <div class="messages-area" #messagesArea>
+
+            <!-- Loader -->
+            <div class="chat-loader" *ngIf="loadingChat()">
+              <span class="spinner"></span> Loading messages…
+            </div>
+
+            <!-- Empty conversation -->
+            <div class="chat-empty-state small" *ngIf="!loadingChat() && messages().length === 0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+              </svg>
+              <p>No messages yet. Say hello!</p>
+            </div>
+
+            <ng-container *ngFor="let msg of messages(); let i = index">
+
+              <!-- Day separator -->
+              <div class="day-separator" *ngIf="isNewDay(messages(), i)">
+                <span>{{ formatDay(msg.timestamp) }}</span>
+              </div>
+
+              <!-- Message bubble -->
+              <div class="msg-row" [class.mine]="isMine(msg)">
+                <div class="msg-avatar">{{ initials(msg.sender.id) }}</div>
+                <div class="msg-bubble-wrap">
+                  <div class="msg-bubble">{{ msg.message }}</div>
+                  <div class="msg-meta">
+                    {{ formatTime(msg.timestamp) }}
+                    <span class="seen-tick" *ngIf="isMine(msg)">
+                      {{ msg.seen ? '✓✓' : '✓' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </ng-container>
+          </div>
+
+          <!-- Compose bar -->
+          <div class="compose-bar">
+            <textarea
+              class="compose-input"
+              [(ngModel)]="newMessage"
+              placeholder="Type a message… (Enter to send)"
+              rows="1"
+              (keydown)="onComposeKeydown($event)"
+            ></textarea>
+            <button
+              class="send-btn"
+              (click)="sendMessage()"
+              [disabled]="!newMessage.trim() || sendingMessage"
+            >
+              <span class="btn-spinner" *ngIf="sendingMessage"></span>
+              <svg *ngIf="!sendingMessage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+
+        </ng-container>
       </div>
 
     </section>
@@ -174,31 +332,15 @@
 
         <div class="form-group">
           <label for="questionId">Question ID</label>
-          <input
-            id="questionId"
-            type="number"
-            [(ngModel)]="questionId"
-            placeholder="e.g. 42"
-            min="1"
-          />
+          <input id="questionId" type="number" [(ngModel)]="questionId" placeholder="e.g. 42" min="1"/>
         </div>
 
         <div class="form-group">
           <label for="quizId">Quiz ID</label>
-          <input
-            id="quizId"
-            type="number"
-            [(ngModel)]="quizId"
-            placeholder="e.g. 7"
-            min="1"
-          />
+          <input id="quizId" type="number" [(ngModel)]="quizId" placeholder="e.g. 7" min="1"/>
         </div>
 
-        <button
-          class="submit-btn"
-          (click)="submitAssign()"
-          [disabled]="assignLoading"
-        >
+        <button class="submit-btn" (click)="submitAssign()" [disabled]="assignLoading">
           <span class="btn-spinner" *ngIf="assignLoading"></span>
           <svg *ngIf="!assignLoading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 5v14M5 12h14"/>
@@ -227,56 +369,30 @@
         <p class="modal-sub">{{ getQuizTitle(activeAttempt!) }} · {{ getStudentName(activeAttempt!) }}</p>
       </div>
 
-      <!-- Score Slider -->
       <div class="modal-section">
         <label>
           Final Score
           <span class="score-display">{{ finalScore }}</span>
         </label>
-        <input
-          type="range"
-          [(ngModel)]="finalScore"
-          min="0" max="100" step="1"
-        />
-        <div class="range-labels">
-          <span>0</span>
-          <span>100</span>
-        </div>
+        <input type="range" [(ngModel)]="finalScore" min="0" max="100" step="1"/>
+        <div class="range-labels"><span>0</span><span>100</span></div>
       </div>
 
-      <!-- Verdict -->
       <div class="modal-section">
         <label>Verdict</label>
         <div class="verdict-row">
-          <button
-            class="verdict-btn pass"
-            [class.selected]="selectedVerdict === true"
-            (click)="selectVerdict(true)"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M20 6L9 17l-5-5"/>
-            </svg>
+          <button class="verdict-btn pass" [class.selected]="selectedVerdict === true" (click)="selectVerdict(true)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
             Pass
           </button>
-          <button
-            class="verdict-btn fail"
-            [class.selected]="selectedVerdict === false"
-            (click)="selectVerdict(false)"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
+          <button class="verdict-btn fail" [class.selected]="selectedVerdict === false" (click)="selectVerdict(false)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
             Fail
           </button>
         </div>
       </div>
 
-      <!-- Submit -->
-      <button
-        class="submit-btn modal-submit"
-        (click)="submitReview()"
-        [disabled]="!canSubmit()"
-      >
+      <button class="submit-btn modal-submit" (click)="submitReview()" [disabled]="!canSubmit()">
         <span class="btn-spinner" *ngIf="submittingReview"></span>
         <svg *ngIf="!submittingReview" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M20 6L9 17l-5-5"/>
