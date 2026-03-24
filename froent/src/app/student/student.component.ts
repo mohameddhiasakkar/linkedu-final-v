@@ -309,9 +309,9 @@ export class StudentProfileComponent implements OnInit, OnDestroy, AfterViewChec
   }
 
   /** GET /api/chat/conversation — both directions merged */
-  loadConversation(): void {
+  loadConversation(background = false): void {
     if (!this.myUserId || !this.agentId) return;
-    this.loadingChat.set(true);
+    if (!background) this.loadingChat.set(true);
     Promise.all([
       firstValueFrom(this.chatSvc.getConversation(this.myUserId, this.agentId)).catch(() => [] as ChatMessage[]),
       firstValueFrom(this.chatSvc.getConversation(this.agentId, this.myUserId)).catch(() => [] as ChatMessage[]),
@@ -324,7 +324,7 @@ export class StudentProfileComponent implements OnInit, OnDestroy, AfterViewChec
       this.chatMessages.set(sorted);
       this.markIncomingAsSeen(sorted);
       this.loadingChat.set(false);
-      this.shouldScrollChat = true;
+      if (!background) this.shouldScrollChat = true;
     });
   }
 
@@ -347,7 +347,7 @@ export class StudentProfileComponent implements OnInit, OnDestroy, AfterViewChec
           this.newMessage = '';
           this.chatMessages.update(p => [...p, msg]);
           this.shouldScrollChat = true;
-          this.loadConversation();
+          this.loadConversation(true);
         },
         error: () => console.error('Send failed'),
       });
@@ -393,7 +393,7 @@ export class StudentProfileComponent implements OnInit, OnDestroy, AfterViewChec
   private startConversationPoll(): void {
     this.pollSub?.unsubscribe();
     this.pollSub = interval(this.POLL_MS).subscribe(() => {
-      if (this.agentId) this.loadConversation();
+      if (this.agentId) this.loadConversation(true);
     });
   }
 

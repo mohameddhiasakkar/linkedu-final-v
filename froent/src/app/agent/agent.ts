@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  signal, computed
+  signal, computed, ViewChild, ElementRef, AfterViewChecked
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -38,7 +38,7 @@ export interface ChatContact {
   templateUrl: './agent-review.component.html',
   styleUrls: ['./agent-review.component.css'],
 })
-export class AgentReviewComponent implements OnInit, OnDestroy {
+export class AgentReviewComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   // ── Shared ─────────────────────────────────────────────────────────────────
   activeTab: Tab = 'reviews';
@@ -84,6 +84,10 @@ export class AgentReviewComponent implements OnInit, OnDestroy {
   private unreadSub: Subscription | null = null;
   private readonly POLL_MS = 8000;
 
+  // ── Scroll ─────────────────────────────────────────────────────────────────
+  private shouldScrollChat = false;
+  @ViewChild('chatScrollArea') chatScrollArea!: ElementRef<HTMLDivElement>;
+
   // ── Toast ──────────────────────────────────────────────────────────────────
   toast: Toast = { message: '', type: 'success', visible: false };
   private toastTimer: ReturnType<typeof setTimeout> | null = null;
@@ -103,6 +107,10 @@ export class AgentReviewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.pollSub?.unsubscribe();
     this.unreadSub?.unsubscribe();
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.shouldScrollChat) { this.scrollToBottom(); this.shouldScrollChat = false; }
   }
 
   // ══════════════════════════════════════════════════════════════════════════
@@ -251,9 +259,9 @@ export class AgentReviewComponent implements OnInit, OnDestroy {
     this.startConversationPoll();
   }
 
-  loadConversation(): void {
+  loadConversation(background = false): void {
     if (!this.receiverId) return;
-    this.loadingChat.set(true);
+    if (!background) this.loadingChat.set(true);
 
     Promise.all([
       firstValueFrom(this.chatSvc.getConversation(this.agentId, this.receiverId)).catch(() => [] as ChatMessage[]),
@@ -269,6 +277,7 @@ export class AgentReviewComponent implements OnInit, OnDestroy {
       this.markIncomingAsSeen(sorted);
       this.updateContactPreview(this.receiverId!, sorted);
       this.loadingChat.set(false);
+      if (!background) this.shouldScrollChat = true;
     });
   }
 
@@ -289,7 +298,8 @@ export class AgentReviewComponent implements OnInit, OnDestroy {
         next: msg => {
           this.newMessage = '';
           this.messages.update(prev => [...prev, msg]);
-          this.loadConversation();
+          this.shouldScrollChat = true;
+          this.loadConversation(true);
         },
         error: () => this.showToast('Failed to send message', 'error'),
       });
@@ -368,7 +378,7 @@ export class AgentReviewComponent implements OnInit, OnDestroy {
   private startConversationPoll(): void {
     this.stopConversationPoll();
     this.pollSub = interval(this.POLL_MS).subscribe(() => {
-      if (this.activeTab === 'chat' && this.receiverId) this.loadConversation();
+      if (this.activeTab === 'chat' && this.receiverId) this.loadConversation(true);
     });
   }
 
@@ -380,6 +390,10 @@ export class AgentReviewComponent implements OnInit, OnDestroy {
   private startUnreadPoll(): void {
     this.loadUnread();
     this.unreadSub = interval(this.POLL_MS).subscribe(() => this.loadUnread());
+  }
+
+  private scrollToBottom(): void {
+    try { const el = this.chatScrollArea?.nativeElement; if (el) el.scrollTop = el.scrollHeight; } catch {}
   }
 
   // ── Toast ──────────────────────────────────────────────────────────────────
