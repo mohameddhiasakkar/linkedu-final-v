@@ -9,7 +9,7 @@ import { Subscription, interval, firstValueFrom } from 'rxjs';
 
 import { StudentProfile, Document as StudentDoc } from './student.model';
 import { StudentProfileService } from './student.service';
-import { ChatService } from '../agent/chat.service';
+import { ChatService } from './chat.service';
 import { ChatMessage } from '../agent/chat-message.model';
 import { DocumentService, BackendDocument, DocumentStatus } from './Document.service';
 import { StudentQuizService, Question, StudentAnswerDTO, QuizSubmitResult } from './Student quiz.service';
